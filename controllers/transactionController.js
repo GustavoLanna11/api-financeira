@@ -10,4 +10,6 @@ const getAllTransactions = async (req, res) => {
     }
 };
 
+
+
 export default { getAllTransactions };
