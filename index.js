@@ -11,6 +11,10 @@ import User from "./models/User.js";
 import userRoutes from "./routes/userRoutes.js";
 app.use("/", userRoutes);
 
+import Transaction from "./models/Transaction.js";
+import transactionRoutes from "./routes/transactionRoutes.js";
+app.use("/", transactionRoutes);
+
 const port = 4000;
 app.listen(port, (error)=>{
     if(error) {
