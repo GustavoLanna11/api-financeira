@@ -15,6 +15,10 @@ import Transaction from "./models/Transaction.js";
 import transactionRoutes from "./routes/transactionRoutes.js";
 app.use("/", transactionRoutes);
 
+import BankAccount from "./models/BankAccount.js";
+import bankAccountRoutes from "./routes/bankAccountRoutes.js";
+app.use("/", bankAccountRoutes);
+
 const port = 4000;
 app.listen(port, (error)=>{
     if(error) {
