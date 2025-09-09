@@ -1,0 +1,25 @@
+{
+  "name": "api-financeira",
+  "version": "1.0.0",
+  "description": "Projeto de API financeira desenvolvido em JS, junto ao express e Mongo DB.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npx nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GustavoLanna11/api-financeira.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GustavoLanna11/api-financeira/issues"
+  },
+  "homepage": "https://github.com/GustavoLanna11/api-financeira#readme",
+  "dependencies": {
+    "express": "^5.1.0",
+    "mongoose": "^8.18.1"
+  }
+}
