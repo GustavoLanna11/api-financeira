@@ -1,7 +1,5 @@
 import mongoose from 'mongoose';
 
-// Linkar o banco e o bank account com os outros models
-
 const UserSchema = new mongoose.Schema({
     name: String,  
     cpf: String,
