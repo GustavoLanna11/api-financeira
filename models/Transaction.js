@@ -1,15 +1,14 @@
 import mongoose from 'mongoose';
 
-// Adicionar nome dos usuários da transação, bem como os ids de contas envolvidas
-
 const TransactionSchema = new mongoose.Schema({
-    fromUser: mongoose.Schema.Types.ObjectId,  
-    toUser: mongoose.Schema.Types.ObjectId,  
-    amount: Number,
-    transactionDate: Date,
+    date: Date,
     description: String,
+    amount: Number,
+    type: [{ type: String, enum: ['credit', 'debit', 'transfer'] }],
+    category: String,
+    fromAccount: [{ type: mongoose.Schema.Types.ObjectId, ref:'BankAccount' }],
+    toAccount: [{ type: mongoose.Schema.Types.ObjectId, ref:'BankAccount' }]
 });
-
 
 
 const Transaction = mongoose.model('Transaction', TransactionSchema);

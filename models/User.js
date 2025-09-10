@@ -4,14 +4,11 @@ import mongoose from 'mongoose';
 
 const UserSchema = new mongoose.Schema({
     name: String,  
-    age: Number,
-    genre: String,
-    email: String,
-    password: String,
-    phone: String,
     cpf: String,
-    bank: String,
-    bankAccount: Number,
+    email: String,
+    accounts: [
+        { type: mongoose.Schema.Types.ObjectId, ref: 'BankAccount' }
+    ]
 });
 
 const User = mongoose.model('User', UserSchema);

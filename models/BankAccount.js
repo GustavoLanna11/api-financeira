@@ -1,16 +1,12 @@
 import mongoose from 'mongoose';
 
-// Adicionar o gerador automatico de accountNumber
-
 const BankAccountSchema = new mongoose.Schema({
-    user: mongoose.Schema.Types.ObjectId,  
-    accountNumber: String,
-    agencyNumber: String,
-    bankCode: String,
-    accountType: String,
-    limit: String,
-    status: String,
-    createdAt: { type: Date, default: Date.now }
+    type: String,
+    branch: String,
+    number: Number,
+    balance: Number,
+    transactions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Transaction'  }],
+    user: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user' }]
 });
 
 const BankAccount = mongoose.model('BankAccount', BankAccountSchema);
