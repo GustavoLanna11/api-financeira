@@ -48,5 +48,4 @@ Antes de começar a utilizar o projeto, é necessário configurar o ambiente de 
 E posteriormente o Insomnia ou Postman para verificar como cada requisição se comporta na prática.
 <hr>
 
-<hr>
 <h3>Gustavo Lanna - 2025</h3>
