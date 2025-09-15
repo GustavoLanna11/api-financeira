@@ -1,5 +1,6 @@
 import bankAccountService from "../services/bankAccountServices.js";
 import mongoose from "mongoose";
+import Transaction from "../models/Transaction.js";
 const { ObjectId } = mongoose.Types;
 
 const getAllBankAccounts = async (req, res) => {
@@ -75,4 +76,26 @@ const getOneBankAccount = async(req, res) => {
     }
 }
 
-export default { getAllBankAccounts, createBankAccount, deleteBankAccount, updateBankAccount, getOneBankAccount};
+const getTransactionsByAccount = async (req, res) => {
+  const accountId = req.params.id;
+
+  if (!mongoose.Types.ObjectId.isValid(accountId)) {
+    return res.status(400).json({ error: "ID de conta inválido." });
+  }
+
+  try {
+    const transactions = await Transaction.find({
+      $or: [
+        { fromAccount: accountId },
+        { toAccount: accountId }
+      ]
+    }).sort({ date: -1 });
+
+    return res.status(200).json(transactions);
+  } catch (error) {
+    console.error("Erro ao buscar transações:", error);
+    return res.status(500).json({ error: "Erro interno no servidor." });
+  }
+};
+
+export default { getAllBankAccounts, createBankAccount, deleteBankAccount, updateBankAccount, getOneBankAccount, getTransactionsByAccount  };
