@@ -4,8 +4,10 @@
   "description": "Projeto de API financeira desenvolvido em JS, junto ao express e Mongo DB.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx nodemon index.js"
+    "test": "jest",
+    "start": "npx nodemon index.js",
+    "dev": "nodemon index.js",
+    "seed": "node database/seed.js"
   },
   "repository": {
     "type": "git",
@@ -23,5 +25,9 @@
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
     "mongoose": "^8.18.1"
+  },
+  "devDependencies": {
+    "jest": "^30.1.3",
+    "supertest": "^7.1.4"
   }
 }

@@ -1,38 +1,22 @@
-import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 dotenv.config();
 
+import app from "./app.js";
+
 mongoose.connect(process.env.MONGO_URI)
-.then(() => {
+  .then(() => {
     console.log("Conectado ao MongoDB");
-})
-.catch((error) => {
-    console.log("Erro ao conectar ao MongoDB: " + error);
-});
 
-
-const app = express();
-
-app.use(express.urlencoded({extended:false}));
-app.use(express.json());
-
-import User from "./models/User.js";
-import userRoutes from "./routes/userRoutes.js";
-app.use("/", userRoutes);
-
-import Transaction from "./models/Transaction.js";
-import transactionRoutes from "./routes/transactionRoutes.js";
-app.use("/", transactionRoutes);
-
-import BankAccount from "./models/BankAccount.js";
-import bankAccountRoutes from "./routes/bankAccountRoutes.js";
-app.use("/", bankAccountRoutes);
-
-const port = 4000;
-app.listen(port, (error)=>{
-    if(error) {
-        console.log(error);
-    }
-    console.log(`API rodando em http://localhost:${port}`);
-});
+    const port = process.env.PORT || 4000;
+    app.listen(port, (error) => {
+      if (error) {
+        console.error(error);
+      } else {
+        console.log(`API rodando em http://localhost:${port}`);
+      }
+    });
+  })
+  .catch((error) => {
+    console.error("Erro ao conectar ao MongoDB: " + error);
+  });
