@@ -1,7 +1,17 @@
 import express from "express";
 import mongoose from "mongoose";
+import dotenv from "dotenv";
+dotenv.config();
 
-mongoose.connect("mongodb://127.0.0.1:27017/api-financeira")
+mongoose.connect(process.env.MONGO_URI)
+.then(() => {
+    console.log("Conectado ao MongoDB");
+})
+.catch((error) => {
+    console.log("Erro ao conectar ao MongoDB: " + error);
+});
+
+
 const app = express();
 
 app.use(express.urlencoded({extended:false}));
