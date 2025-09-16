@@ -1,7 +1,10 @@
 import mongoose from 'mongoose';
 
 const TransactionSchema = new mongoose.Schema({
-    date: Date,
+    date: {
+        type: Date,
+        default: Date.now  
+    },
     description: String,
     amount: Number,
     type: [{ type: String, enum: ['credit', 'debit', 'transfer'] }],

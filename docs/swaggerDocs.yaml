@@ -1,0 +1,346 @@
+openapi: 3.0.3
+info:
+  title: API - Sistema Bancário
+  version: 1.0.0
+  description: API RESTful para gerenciamento de contas bancárias, transações e usuários.
+
+servers:
+  - url: http://localhost:4000
+    description: Servidor local
+
+paths:
+
+  /bank-account:
+    get:
+      summary: Retorna todas as contas bancárias cadastradas.
+      tags: [Contas Bancárias]
+      responses:
+        200:
+          description: Lista de contas bancárias.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BankAccount'
+        500:
+          description: Erro interno do servidor
+    post:
+      summary: Cria uma nova conta bancária.
+      tags: [Contas Bancárias]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BankAccount'
+      responses:
+        201:
+          description: Conta bancária criada com sucesso.
+        500:
+          description: Erro interno do servidor
+
+  /bank-account/{id}:
+    put:
+      summary: Atualiza uma conta bancária existente.
+      tags: [Contas Bancárias]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BankAccount'
+      responses:
+        200:
+          description: Conta atualizada com sucesso.
+        404:
+          description: Conta não encontrada.
+        500:
+          description: Erro interno do servidor
+
+    delete:
+      summary: Deleta uma conta bancária.
+      tags: [Contas Bancárias]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Conta deletada com sucesso.
+        404:
+          description: Conta não encontrada.
+        500:
+          description: Erro interno do servidor
+
+  /bank-account/{id}/transactions:
+    get:
+      summary: Lista todas as transações de uma conta bancária.
+      tags: [Contas Bancárias]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Lista de transações da conta.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+        404:
+          description: Conta não encontrada.
+        500:
+          description: Erro interno do servidor
+
+  /transactions:
+    get:
+      summary: Lista todas as transações.
+      tags: [Transações]
+      responses:
+        200:
+          description: Lista de transações.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+        500:
+          description: Erro interno do servidor
+    post:
+      summary: Cria uma nova transação.
+      tags: [Transações]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+      responses:
+        201:
+          description: Transação criada com sucesso.
+        500:
+          description: Erro interno do servidor
+
+  /transactions/{id}:
+    put:
+      summary: Atualiza uma transação existente.
+      tags: [Transações]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+      responses:
+        200:
+          description: Transação atualizada com sucesso.
+        404:
+          description: Transação não encontrada.
+        500:
+          description: Erro interno do servidor
+
+    delete:
+      summary: Deleta uma transação.
+      tags: [Transações]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Transação deletada com sucesso.
+        404:
+          description: Transação não encontrada.
+        500:
+          description: Erro interno do servidor
+
+  /users:
+    get:
+      summary: Lista todos os usuários.
+      tags: [Usuários]
+      responses:
+        200:
+          description: Lista de usuários.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        500:
+          description: Erro interno do servidor
+    post:
+      summary: Cria um novo usuário.
+      tags: [Usuários]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        201:
+          description: Usuário criado com sucesso.
+        400:
+          description: Dados inválidos.
+        500:
+          description: Erro interno do servidor
+
+  /users/{id}:
+    put:
+      summary: Atualiza um usuário existente.
+      tags: [Usuários]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        200:
+          description: Usuário atualizado com sucesso.
+        404:
+          description: Usuário não encontrado.
+        500:
+          description: Erro interno do servidor
+
+    delete:
+      summary: Deleta um usuário.
+      tags: [Usuários]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Usuário deletado com sucesso.
+        404:
+          description: Usuário não encontrado.
+        500:
+          description: Erro interno do servidor
+
+components:
+  schemas:
+
+    BankAccount:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "650e834fd9a1cf27f89c1234"
+        type:
+          type: string
+          example: "Corrente"
+        branch:
+          type: string
+          example: "001"
+        number:
+          type: number
+          example: 1234567
+        balance:
+          type: number
+          format: float
+          example: 1000.50
+        transactions:
+          type: array
+          items:
+            type: string
+            example: "651e8ae2f1a1bc0012e4abcd"
+        user:
+          type: array
+          items:
+            type: string
+            example: "650e9001a1cfde0023cdef12"
+
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "651e8ae2f1a1bc0012e4abcd"
+        date:
+          type: string
+          format: date-time
+          example: "2025-09-16T12:00:00Z"
+        description:
+          type: string
+          example: "Transferência para João"
+        amount:
+          type: number
+          format: float
+          example: 250.00
+        type:
+          type: array
+          items:
+            type: string
+            enum: [credit, debit, transfer]
+          example: ["debit"]
+        category:
+          type: string
+          example: "Pagamento"
+        fromAccount:
+          type: array
+          items:
+            type: string
+            example: "650e834fd9a1cf27f89c1234"
+        toAccount:
+          type: array
+          items:
+            type: string
+            example: "650e834fd9a1cf27f89c5678"
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "650e9001a1cfde0023cdef12"
+        name:
+          type: string
+          example: "Carlos Oliveira"
+        cpf:
+          type: string
+          example: "123.456.789-00"
+        email:
+          type: string
+          example: "carlos@example.com"
+        accounts:
+          type: array
+          items:
+            type: string
+            example: "650e834fd9a1cf27f89c1234"
+
+tags:
+  - name: Contas Bancárias
+  - name: Transações
+  - name: Usuários
