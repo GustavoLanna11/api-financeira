@@ -1,54 +1,61 @@
 import Transaction from "../models/Transaction.js";
-import mongoose from "mongoose";
-const { ObjectId } = mongoose.Types;
 
-class transactionService{
-    async getAll(){
-        try{
-            const transactions = await Transaction.find();
-            return transactions;
-        } catch(error) {
-            console.log(error);
-        }
-    }
+class TransactionService {
+  async getAll() {
+    return Transaction.find();
+  }
 
-    async Create( date, description, amount, type, category, fromAccount, toAccount ) {
-        try{
-            const newTransaction = new Transaction({
-                date, 
-                description, 
-                amount, 
-                type, 
-                category, 
-                fromAccount, 
-                toAccount
-            })
-            await newTransaction.save()
-        } catch(error) {
-            console.log(error)
-        }
-    }
+  async create(
+    date,
+    description,
+    amount,
+    type,
+    category,
+    fromAccount,
+    toAccount
+  ) {
+    return Transaction.create({
+      date,
+      description,
+      amount,
+      type,
+      category,
+      fromAccount,
+      toAccount,
+    });
+  }
 
-    async Delete(id) {
-        try{
-            await Transaction.findByIdAndDelete(id);
-            console.log(`Transação com a id: ${id} foi deletada!`);
-        } catch (error) {
-            console.log(error)
-        }
-    }
+  async update(
+    id,
+    date,
+    description,
+    amount,
+    type,
+    category,
+    fromAccount,
+    toAccount
+  ) {
+    return Transaction.findByIdAndUpdate(
+      id,
+      { date, description, amount, type, category, fromAccount, toAccount },
+      { new: true }
+    );
+  }
 
-    async getOne(id){
-        try{
-            const transaction = await transaction.findOne({_id: id})
-            return transaction
-        } catch (error) {
-            console.log(error)
-        }
-    }
+  async delete(id) {
+    return Transaction.findByIdAndDelete(id);
+  }
 
-};
+  async getOne(id) {
+    return Transaction.findById(id);
+  }
 
+  async getByAccount(accountId) {
+    return Transaction.find({
+      $or: [{ fromAccount: accountId }, { toAccount: accountId }],
+    }).sort({ date: -1 });
+  }
+}
 
+export default new TransactionService();
 
-export default new transactionService();

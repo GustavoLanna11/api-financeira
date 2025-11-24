@@ -5,6 +5,7 @@ dotenv.config();
 import User from '../models/User.js';
 import BankAccount from '../models/BankAccount.js';
 import Transaction from '../models/Transaction.js';
+import Consent from '../models/Consent.js';
 
 const runSeed = async () => {
   try {
@@ -14,6 +15,7 @@ const runSeed = async () => {
     await User.deleteMany({});
     await BankAccount.deleteMany({});
     await Transaction.deleteMany({});
+    await Consent.deleteMany({});
     console.log("Dados antigos removidos");
 
     const user1 = await User.create({
@@ -71,7 +73,22 @@ const runSeed = async () => {
     await user1.save();
     await user2.save();
 
-    console.log("Seed com 2 usuários, 2 contas e 1 transferência criado com sucesso!");
+    await Consent.create([
+      {
+        customer: user1._id,
+        clientAppId: "client_app_001",
+        permissions: ["accounts", "transactions"],
+        expiresAt: new Date(Date.now() + 180 * 24 * 60 * 60 * 1000),
+      },
+      {
+        customer: user2._id,
+        clientAppId: "client_app_001",
+        permissions: ["accounts"],
+        expiresAt: new Date(Date.now() + 120 * 24 * 60 * 60 * 1000),
+      },
+    ]);
+
+    console.log("Seed com 2 usuários, 2 contas, 1 transferência e consentimentos criado com sucesso!");
     process.exit();
   } catch (error) {
     console.error("Erro ao rodar o seed:", error);

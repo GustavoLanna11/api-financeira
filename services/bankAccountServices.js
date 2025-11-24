@@ -1,70 +1,42 @@
 import BankAccount from "../models/BankAccount.js";
-import bankAccount from "../models/BankAccount.js";
 
-class bankAccountService{
-    async getAll(){
-        try{
-            const bankAccounts = await bankAccount.find();
-            return bankAccounts;
-        } catch(error) {
-            console.log(error);
-        }
-    }
+class BankAccountService {
+  async getAll() {
+    return BankAccount.find();
+  }
 
-    async Create( type, branch, number, balance, transactions, user ) {
-        try{
-            const newBankAccount = new BankAccount({
-                type, 
-                branch, 
-                number, 
-                balance, 
-                transactions, 
-                user
-            })
-            await newBankAccount.save()
-        } catch(error) {
-            console.log(error)
-        }
-    }
+  async create(type, branch, number, balance, transactions, user) {
+    return BankAccount.create({
+      type,
+      branch,
+      number,
+      balance,
+      transactions,
+      user,
+    });
+  }
 
-    async Delete(id) {
-        try{
-            await BankAccount.findByIdAndDelete(id);
-            console.log(`Conta com a id: ${id} foi deletada!`);
-        } catch (error) {
-            console.log(error)
-        }
-    }
+  async delete(id) {
+    return BankAccount.findByIdAndDelete(id);
+  }
 
-    async Update(id, type, branch, number, balance, transactions, user) {
-        try{
-            const updatedBankAccount = await BankAccount.findByIdAndUpdate(
-                id,
-                {
-                    type, 
-                    branch,
-                    number, 
-                    balance, 
-                    transactions, 
-                    user
-                },
-                { new: true }
-            );
-            console.log(`Dados da conta com id: ${id} alterados com sucesso.`);
-            return updatedBankAccount;
-        } catch(error) {
-            console.log(error);
-        }
-    }
+  async update(id, type, branch, number, balance, transactions, user) {
+    return BankAccount.findByIdAndUpdate(
+      id,
+      { type, branch, number, balance, transactions, user },
+      { new: true }
+    );
+  }
 
-    async getOne(id){
-        try{
-            const bankAccount = await BankAccount.findOne({_id: id})
-            return bankAccount
-        } catch (error) {
-            console.log(error)
-        }
-    }
-};
+  async getOne(id) {
+    return BankAccount.findById(id);
+  }
 
-export default new bankAccountService();
+  async getByUserId(userId) {
+    return BankAccount.find({
+      user: { $in: [userId] },
+    });
+  }
+}
+
+export default new BankAccountService();

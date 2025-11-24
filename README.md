@@ -12,6 +12,8 @@ Abaixo estão listadas todas as funcionalidades da API: <br><br>
 📈 Listagem de transações por conta bancária <br>
 🔎 Busca de transação por ID <br>
 ❌ Exclusão de transações <br>
+🔐 Segregação de rotas internas e Open Finance com verificação de API Key <br>
+🧾 Gestão de consentimentos Open Finance (criação, consulta e revogação) <br>
 
 <hr>
 <h3>🛠️ Tecnologias</h3>
@@ -26,8 +28,26 @@ Para o desenvolvimento da API foram usadas as tecnologias listadas abaixo, cada 
 Este projeto segue uma arquitetura em camadas, inspirada no padrão MVC desacoplado, com separação clara entre responsabilidades. A estrutura é pensada para facilitar a manutenção, testes e escalabilidade. <br><br>
 • controllers/ Camada que lida com as requisições e respostas (lógica de entrada e saída) <br>
 • models/ Definição dos modelos de dados, ODM. <br>
-• routes/ Definição dos endpoints e associações com os controllers. <br>
+• routes/ Definição dos endpoints e associações com os controllers (rotas internas e rotas Open Finance). <br>
 • services/ Regra de negócio e lógica da aplicação, camada intermediária entre controllers e models. <br><br>
+
+### 🔗 Estrutura de Rotas
+
+- Rotas internas: `/` (usuários, contas, transações e gestão de consentimentos)
+- Rotas Open Finance: `/openfinance` (requere header `x-api-key`)
+
+### 🔑 Configuração de API Key (Open Finance)
+
+Inclua no arquivo `.env`:
+
+```
+OPEN_FINANCE_KEYS=client_app_001:minha-api-key,client_app_002:outra-chave
+API_KEY_HEADER=x-api-key
+INSTITUTION_ID=fi_001
+INSTITUTION_NAME=api-financeira
+```
+
+Cada par `client_app_id:api_key` será validado pelo middleware `verifyApiKey`. O `client_app_id` também é usado para criar e filtrar consentimentos.
 
 <hr>
 <h3>❓ Como rodar o projeto?</h3>

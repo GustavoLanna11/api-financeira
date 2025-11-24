@@ -1,68 +1,42 @@
 import User from "../models/User.js";
 
-class userService{
-    async getAll(){
-        try{
-            const users = await User.find();
-            return users;
-        } catch(error) {
-            console.log(error);
-        }
-    }
+class UserService {
+  async getAll() {
+    return User.find();
+  }
 
-        async Create( name, cpf, email, accounts) {
-        try{
-            const newUser = new User({
-                name,
-                cpf,
-                email,
-                accounts
-            })
-            await newUser.save()
-        } catch(error) {
-            console.log(error)
-        }
-    }
+  async create(name, cpf, email, accounts) {
+    const newUser = await User.create({
+      name,
+      cpf,
+      email,
+      accounts,
+    });
+    return newUser;
+  }
 
-    async Delete(id) {
-        try{
-            await User.findByIdAndDelete(id);
-            console.log(`User com a id: ${id} foi deletado!`);
-        } catch (error) {
-            console.log(error)
-        }
-    }
+  async update(id, name, cpf, email, accounts) {
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      { name, cpf, email, accounts },
+      { new: true }
+    );
+    return updatedUser;
+  }
 
-    async Update(id, name, cpf, email, accounts) {
-        try{
-            const updatedUser = await User.findByIdAndUpdate(
-                id,
-                {
-                    name, 
-                    cpf,
-                    email,
-                    accounts
-                },
-                { new: true }
-            );
-            console.log(`Dados do User com id: ${id} alterados com sucesso.`);
-            return updatedUser;
-        } catch(error) {
-            console.log(error);
-        }
-    }
+  async delete(id) {
+    const deleted = await User.findByIdAndDelete(id);
+    return deleted;
+  }
 
-    async getOne(id){
-        try{
-            const user = await User.findOne({_id: id})
-            return user
-        } catch (error) {
-            console.log(error)
-        }
-    }
-};
+  async getOne(id) {
+    return User.findById(id);
+  }
 
+  async getAccountsByUser(id) {
+    const user = await User.findById(id).populate("accounts");
+    return user?.accounts;
+  }
+}
 
-
-
-export default new userService();
+export default new UserService();
