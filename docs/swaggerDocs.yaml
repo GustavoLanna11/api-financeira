@@ -1,346 +1,605 @@
 openapi: 3.0.3
 info:
-  title: API - Sistema Bancário
-  version: 1.0.0
-  description: API RESTful para gerenciamento de contas bancárias, transações e usuários.
+  title: API Financeira - Internal & Open Finance
+  version: 1.1.0
+  description: >
+    API RESTful com rotas internas e rotas Open Finance alinhadas à API fornecedora.
 
 servers:
   - url: http://localhost:4000
     description: Servidor local
 
 paths:
-
-  /bank-account:
-    get:
-      summary: Retorna todas as contas bancárias cadastradas.
-      tags: [Contas Bancárias]
-      responses:
-        200:
-          description: Lista de contas bancárias.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/BankAccount'
-        500:
-          description: Erro interno do servidor
-    post:
-      summary: Cria uma nova conta bancária.
-      tags: [Contas Bancárias]
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/BankAccount'
-      responses:
-        201:
-          description: Conta bancária criada com sucesso.
-        500:
-          description: Erro interno do servidor
-
-  /bank-account/{id}:
-    put:
-      summary: Atualiza uma conta bancária existente.
-      tags: [Contas Bancárias]
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/BankAccount'
-      responses:
-        200:
-          description: Conta atualizada com sucesso.
-        404:
-          description: Conta não encontrada.
-        500:
-          description: Erro interno do servidor
-
-    delete:
-      summary: Deleta uma conta bancária.
-      tags: [Contas Bancárias]
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        200:
-          description: Conta deletada com sucesso.
-        404:
-          description: Conta não encontrada.
-        500:
-          description: Erro interno do servidor
-
-  /bank-account/{id}/transactions:
-    get:
-      summary: Lista todas as transações de uma conta bancária.
-      tags: [Contas Bancárias]
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        200:
-          description: Lista de transações da conta.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Transaction'
-        404:
-          description: Conta não encontrada.
-        500:
-          description: Erro interno do servidor
-
-  /transactions:
-    get:
-      summary: Lista todas as transações.
-      tags: [Transações]
-      responses:
-        200:
-          description: Lista de transações.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Transaction'
-        500:
-          description: Erro interno do servidor
-    post:
-      summary: Cria uma nova transação.
-      tags: [Transações]
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Transaction'
-      responses:
-        201:
-          description: Transação criada com sucesso.
-        500:
-          description: Erro interno do servidor
-
-  /transactions/{id}:
-    put:
-      summary: Atualiza uma transação existente.
-      tags: [Transações]
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Transaction'
-      responses:
-        200:
-          description: Transação atualizada com sucesso.
-        404:
-          description: Transação não encontrada.
-        500:
-          description: Erro interno do servidor
-
-    delete:
-      summary: Deleta uma transação.
-      tags: [Transações]
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        200:
-          description: Transação deletada com sucesso.
-        404:
-          description: Transação não encontrada.
-        500:
-          description: Erro interno do servidor
-
   /users:
     get:
-      summary: Lista todos os usuários.
+      summary: Lista usuários
       tags: [Usuários]
       responses:
         200:
-          description: Lista de usuários.
+          description: Lista de usuários
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/User'
-        500:
-          description: Erro interno do servidor
     post:
-      summary: Cria um novo usuário.
+      summary: Cria usuário
       tags: [Usuários]
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserInput'
       responses:
         201:
-          description: Usuário criado com sucesso.
-        400:
-          description: Dados inválidos.
-        500:
-          description: Erro interno do servidor
+          description: Usuário criado
 
   /users/{id}:
-    put:
-      summary: Atualiza um usuário existente.
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      summary: Busca usuário por ID
       tags: [Usuários]
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
+      responses:
+        200:
+          description: Usuário encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        404:
+          description: Não encontrado
+    put:
+      summary: Atualiza usuário
+      tags: [Usuários]
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserInput'
       responses:
         200:
-          description: Usuário atualizado com sucesso.
-        404:
-          description: Usuário não encontrado.
-        500:
-          description: Erro interno do servidor
-
+          description: Atualizado
     delete:
-      summary: Deleta um usuário.
+      summary: Remove usuário
       tags: [Usuários]
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
+      responses:
+        204:
+          description: Removido
+
+  /users/{id}/accounts:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      summary: Lista contas de um usuário
+      tags: [Usuários]
       responses:
         200:
-          description: Usuário deletado com sucesso.
+          description: Lista de contas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BankAccount'
+
+  /accounts:
+    get:
+      summary: Lista contas bancárias
+      tags: [Contas]
+      responses:
+        200:
+          description: Lista de contas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BankAccount'
+    post:
+      summary: Cria conta bancária
+      tags: [Contas]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BankAccountInput'
+      responses:
+        201:
+          description: Conta criada
+
+  /accounts/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      summary: Busca conta
+      tags: [Contas]
+      responses:
+        200:
+          description: Conta encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankAccount'
         404:
-          description: Usuário não encontrado.
-        500:
-          description: Erro interno do servidor
+          description: Não encontrada
+    put:
+      summary: Atualiza conta
+      tags: [Contas]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BankAccountInput'
+      responses:
+        200:
+          description: Conta atualizada
+    delete:
+      summary: Remove conta
+      tags: [Contas]
+      responses:
+        204:
+          description: Removida
+
+  /accounts/{id}/transactions:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      summary: Lista transações da conta
+      tags: [Contas]
+      responses:
+        200:
+          description: Lista de transações
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+
+  /accounts/{id}/balance:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      summary: Consulta saldo interno
+      tags: [Contas]
+      responses:
+        200:
+          description: Saldo da conta
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  balance:
+                    type: number
+                    format: float
+
+  /transactions:
+    get:
+      summary: Lista transações
+      tags: [Transações]
+      responses:
+        200:
+          description: Lista de transações
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+    post:
+      summary: Cria transação
+      tags: [Transações]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionInput'
+      responses:
+        201:
+          description: Criada
+
+  /transactions/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      summary: Busca transação
+      tags: [Transações]
+      responses:
+        200:
+          description: Encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+    put:
+      summary: Atualiza transação
+      tags: [Transações]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionInput'
+      responses:
+        200:
+          description: Atualizada
+    delete:
+      summary: Remove transação
+      tags: [Transações]
+      responses:
+        204:
+          description: Removida
+
+  /openfinance/consents:
+    post:
+      summary: Cria consentimento (uso interno)
+      tags: [Consentimentos Internos]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConsentInput'
+      responses:
+        201:
+          description: Consentimento criado
+    get:
+      summary: Lista consentimentos ativos
+      tags: [Open Finance]
+      security:
+        - ApiKeyAuth: []
+      responses:
+        200:
+          description: Lista consentimentos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Consent'
+
+  /openfinance/consents/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    delete:
+      summary: Revoga consentimento (uso interno)
+      tags: [Consentimentos Internos]
+      responses:
+        200:
+          description: Consentimento revogado
+    get:
+      summary: Consulta consentimento
+      tags: [Open Finance]
+      security:
+        - ApiKeyAuth: []
+      responses:
+        200:
+          description: Consentimento
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Consent'
+        404:
+          description: Não encontrado
+
+  /openfinance/institution:
+    get:
+      summary: Dados da instituição
+      tags: [Open Finance]
+      security:
+        - ApiKeyAuth: []
+      responses:
+        200:
+          description: Dados básicos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  status:
+                    type: boolean
+
+  /openfinance/customers/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      summary: Dados do cliente (Open Finance)
+      tags: [Open Finance]
+      security:
+        - ApiKeyAuth: []
+      responses:
+        200:
+          description: Dados básicos autorizados
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  name:
+                    type: string
+                  cpf:
+                    type: string
+
+  /openfinance/customers/{id}/accounts:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      summary: Contas do cliente (Open Finance)
+      tags: [Open Finance]
+      security:
+        - ApiKeyAuth: []
+      responses:
+        200:
+          description: Lista filtrada
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    _id:
+                      type: string
+                    type:
+                      type: string
+                    branch:
+                      type: string
+                    number:
+                      type: string
+
+  /openfinance/accounts/{id}/balance:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      summary: Saldo Open Finance
+      tags: [Open Finance]
+      security:
+        - ApiKeyAuth: []
+      responses:
+        200:
+          description: Saldo disponível
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  balance:
+                    type: number
+                    format: float
+
+  /openfinance/accounts/{id}/transactions:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      summary: Transações Open Finance
+      tags: [Open Finance]
+      security:
+        - ApiKeyAuth: []
+      responses:
+        200:
+          description: Lista de transações autorizadas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OpenFinanceTransaction'
 
 components:
+  parameters:
+    IdParam:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+
   schemas:
-
-    BankAccount:
-      type: object
-      properties:
-        id:
-          type: string
-          example: "650e834fd9a1cf27f89c1234"
-        type:
-          type: string
-          example: "Corrente"
-        branch:
-          type: string
-          example: "001"
-        number:
-          type: number
-          example: 1234567
-        balance:
-          type: number
-          format: float
-          example: 1000.50
-        transactions:
-          type: array
-          items:
-            type: string
-            example: "651e8ae2f1a1bc0012e4abcd"
-        user:
-          type: array
-          items:
-            type: string
-            example: "650e9001a1cfde0023cdef12"
-
-    Transaction:
-      type: object
-      properties:
-        id:
-          type: string
-          example: "651e8ae2f1a1bc0012e4abcd"
-        date:
-          type: string
-          format: date-time
-          example: "2025-09-16T12:00:00Z"
-        description:
-          type: string
-          example: "Transferência para João"
-        amount:
-          type: number
-          format: float
-          example: 250.00
-        type:
-          type: array
-          items:
-            type: string
-            enum: [credit, debit, transfer]
-          example: ["debit"]
-        category:
-          type: string
-          example: "Pagamento"
-        fromAccount:
-          type: array
-          items:
-            type: string
-            example: "650e834fd9a1cf27f89c1234"
-        toAccount:
-          type: array
-          items:
-            type: string
-            example: "650e834fd9a1cf27f89c5678"
-
     User:
       type: object
       properties:
-        id:
+        _id:
           type: string
-          example: "650e9001a1cfde0023cdef12"
         name:
           type: string
-          example: "Carlos Oliveira"
         cpf:
           type: string
-          example: "123.456.789-00"
         email:
           type: string
-          example: "carlos@example.com"
         accounts:
           type: array
           items:
             type: string
-            example: "650e834fd9a1cf27f89c1234"
+    UserInput:
+      type: object
+      required: [name, cpf, email]
+      properties:
+        name:
+          type: string
+        cpf:
+          type: string
+        email:
+          type: string
+        accounts:
+          type: array
+          items:
+            type: string
+    BankAccount:
+      type: object
+      properties:
+        _id:
+          type: string
+        type:
+          type: string
+        branch:
+          type: string
+        number:
+          type: string
+        balance:
+          type: number
+        user:
+          type: array
+          items:
+            type: string
+        transactions:
+          type: array
+          items:
+            type: string
+    BankAccountInput:
+      type: object
+      required: [type, branch, number, balance, user]
+      properties:
+        type:
+          type: string
+        branch:
+          type: string
+        number:
+          type: string
+        balance:
+          type: number
+        transactions:
+          type: array
+          items:
+            type: string
+        user:
+          type: array
+          items:
+            type: string
+    Transaction:
+      type: object
+      properties:
+        _id:
+          type: string
+        date:
+          type: string
+          format: date-time
+        description:
+          type: string
+        amount:
+          type: number
+        type:
+          type: string
+        category:
+          type: string
+        fromAccount:
+          type: array
+          items:
+            type: string
+        toAccount:
+          type: array
+          items:
+            type: string
+    TransactionInput:
+      type: object
+      required: [description, amount, type, category]
+      properties:
+        date:
+          type: string
+          format: date-time
+        description:
+          type: string
+        amount:
+          type: number
+        type:
+          type: string
+          enum: [credit, debit, transfer]
+        category:
+          type: string
+        fromAccount:
+          type: array
+          items:
+            type: string
+        toAccount:
+          type: array
+          items:
+            type: string
+    Consent:
+      type: object
+      properties:
+        _id:
+          type: string
+        customer:
+          type: string
+        clientAppId:
+          type: string
+        permissions:
+          type: array
+          items:
+            type: string
+            enum: [accounts, transactions]
+        status:
+          type: string
+          enum: [active, revoked, expired]
+        expiresAt:
+          type: string
+          format: date-time
+        revokedAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+    ConsentInput:
+      type: object
+      required: [customerId, permissions, expiresAt]
+      properties:
+        customerId:
+          type: string
+        clientAppId:
+          type: string
+          description: Opcional - usa clientAppId do header se omitido
+        permissions:
+          type: array
+          items:
+            type: string
+            enum: [accounts, transactions]
+        expiresAt:
+          type: string
+          format: date-time
+    OpenFinanceTransaction:
+      type: object
+      properties:
+        _id:
+          type: string
+        date:
+          type: string
+          format: date-time
+        description:
+          type: string
+        amount:
+          type: number
+        type:
+          type: string
+        category:
+          type: string
 
 tags:
-  - name: Contas Bancárias
-  - name: Transações
   - name: Usuários
+    description: Rotas internas de usuários
+  - name: Contas
+    description: Rotas internas de contas
+  - name: Transações
+    description: Rotas internas de transações
+  - name: Consentimentos Internos
+    description: Gestão interna de consentimentos
+  - name: Open Finance
+    description: Rotas públicas que exigem API Key
